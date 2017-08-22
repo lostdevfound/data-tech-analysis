@@ -1,16 +1,15 @@
 import numpy as np
-from matplotlib import pyplot as pl
 import sympy as sp
+from matplotlib import pyplot as plt
+import seaborn as sns
+from math import *
 
 # compute coefficients for trig fourier series
 def coef(vec, t, trigFunc):
     a = 0
     x = sp.Symbol('x')
-    trigf = sp.cos(t*x)
 
-    if trigFunc == "sin":
-        trigf = sp.sin(t*x)
-    elif trigFunc != "sin" and trigFunc != "cos":
+    if trigFunc != "sin" and trigFunc != "cos":
         raise ValueError("trigFunc argument must be 'sin' or 'cos'")
 
     # iterate through the vector and get vec[i] and vec[i+1]
@@ -21,26 +20,26 @@ def coef(vec, t, trigFunc):
         lowerBound = i*scaler
         upperBound = (i + 1)*scaler
 
-        # compute the sum series of integrals with bounds i to i + 1
+        # compute the series of integrals with bounds i to i + 1
         if trigFunc == "cos":
-            # TODO make it lambda function
-            f = (-1)*i*scaler*slope*sp.sin(t*x)/t + vec[i]*sp.sin(t*x)/t + slope*x*sp.sin(t*x)/t + slope*sp.cos(t*x)/t**2
+            f = lambda x: (-1)*i*scaler*slope*sin(t*x)/t + vec[i]*sin(t*x)/t + slope*x*sin(t*x)/t + slope*cos(t*x)/t**2
+            # f = (-1)*i*scaler*slope*sp.sin(t*x)/t + vec[i]*sp.sin(t*x)/t + slope*x*sp.sin(t*x)/t + slope*sp.cos(t*x)/t**2
 
             if (t == 0):
-                # TODO make it lmbda function
-                f = slope*x**2/2 + x*(-i*scaler*slope + vec[i])
-                a += (f.subs(x, upperBound) - f.subs(x, lowerBound)) * 1 / (2 * sp.pi)
+                f = lambda x: slope*x**2/2 + x*(-i*scaler*slope + vec[i])
+                # f = slope*x**2/2 + x*(-i*scaler*slope + vec[i])
+                a += (f(upperBound) - f(lowerBound)) * 1 / (2 * sp.pi)
             else:
-                a += (f.subs(x, upperBound) - f.subs(x, lowerBound)) * 1 / sp.pi
+                a += (f(upperBound) - f(lowerBound)) * 1 / sp.pi
 
         else:
-            # TODO make it lambda function
-            f = i*scaler*slope*sp.cos(t*x)/t - vec[i]*sp.cos(t*x)/t - slope*x*sp.cos(t*x)/t + slope*sp.sin(t*x)/t**2
+            f = lambda x: i*scaler*slope*cos(t*x)/t - vec[i]*cos(t*x)/t - slope*x*cos(t*x)/t + slope*sin(t*x)/t**2
+            # f = i*scaler*slope*sp.cos(t*x)/t - vec[i]*sp.cos(t*x)/t - slope*x*sp.cos(t*x)/t + slope*sp.sin(t*x)/t**2
 
             if (t == 0):
                 a += 0
             else:
-                a += (f.subs(x, upperBound) - f.subs(x, lowerBound)) * 1 / sp.pi
+                a += (f(upperBound) - f(lowerBound)) * 1 / sp.pi
     # print(trigFunc, "coef:", t, a)
     return a
 
@@ -60,8 +59,7 @@ def fourierTrigSeries(vec, n=10):
 
 xs = np.arange(0, 15, 0.1)
 v = np.random.rand(15)
-# v = [3, 3.5, 2, 2]
 series = fourierTrigSeries(v, 6)
-# pl.plot(xs, series(xs), 'r--')
-# pl.plot(v, '-gD')
-# pl.show()
+plt.plot(xs, series(xs), '-b')
+plt.plot(v, 'gs--')
+plt.show()
