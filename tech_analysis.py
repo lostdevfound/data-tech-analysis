@@ -4,8 +4,13 @@ from matplotlib import pyplot as plt
 import seaborn as sns
 from math import *
 
-# compute coefficients for trig fourier series
 def coef(vec, t, trigFunc):
+    """
+    Compute the coefficients for Fourier trig series
+    vec -- 1D numpy array of data for Fourier series
+    t -- integer that defines the frequency for a coefficient computation
+    trigFunc -- string input "cos" or "sin"
+    """
     a = 0
     x = sp.Symbol('x')
 
@@ -44,8 +49,12 @@ def coef(vec, t, trigFunc):
     return a
 
 
-# compute the Fourier trigonometric series
 def fourierTrigSeries(vec, n=10):
+    """ Compute trigonometric Fourier series.
+    Keyword args:
+    vec -- a 1D numpy array which contains the data points for Fourier series
+    n -- number of terms in the series
+    """
     x = sp.Symbol('x')
     series = 0
     scaler = 2*sp.pi / (len(vec) -1 )
@@ -56,10 +65,11 @@ def fourierTrigSeries(vec, n=10):
     return sp.lambdify(x, series, modules=['numpy'])
 
 
-
-xs = np.arange(0, 15, 0.1)
-v = np.random.rand(15)
-series = fourierTrigSeries(v, 6)
-plt.plot(xs, series(xs), '-b')
-plt.plot(v, 'gs--')
-plt.show()
+# test program
+if __name__ == "__main__":
+    xs = np.arange(0, 15, 0.1)
+    v = np.random.rand(15)
+    series = fourierTrigSeries(v, 6)
+    plt.plot(xs, series(xs), '-b')
+    plt.plot(v, 'gs--')
+    plt.show()

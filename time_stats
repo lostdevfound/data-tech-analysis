@@ -1,0 +1,17 @@
+echo "sympy data=15 n=6" >> time_stats; (time python tech_analysis.py) &>> time_stats
+
+sympy data=15 n=6
+
+real	0m57.393s
+user	0m56.348s
+sys	0m0.232s
+no sympy for coef data=15 n=6
+
+real	0m37.026s
+user	0m32.520s
+sys	0m0.936s
+no sympy for coef data=15 n=6
+
+real	0m40.928s
+user	0m32.820s
+sys	0m0.940s
