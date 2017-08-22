@@ -27,19 +27,16 @@ def coef(vec, t, trigFunc):
 
         # compute the series of integrals with bounds i to i + 1
         if trigFunc == "cos":
-            f = lambda x: (-1)*i*scaler*slope*sin(t*x)/t + vec[i]*sin(t*x)/t + slope*x*sin(t*x)/t + slope*cos(t*x)/t**2
-            # f = (-1)*i*scaler*slope*sp.sin(t*x)/t + vec[i]*sp.sin(t*x)/t + slope*x*sp.sin(t*x)/t + slope*sp.cos(t*x)/t**2
+            f = lambda x: (-1)*i*scaler*slope*sin(t*x)/t + vec[i]*sin(t*x)/t + slope*x*sin(t*x)/t + slope*cos(t*x)/t**2     # antiderivative
 
             if (t == 0):
                 f = lambda x: slope*x**2/2 + x*(-i*scaler*slope + vec[i])
-                # f = slope*x**2/2 + x*(-i*scaler*slope + vec[i])
                 a += (f(upperBound) - f(lowerBound)) * 1 / (2 * sp.pi)
             else:
                 a += (f(upperBound) - f(lowerBound)) * 1 / sp.pi
 
         else:
-            f = lambda x: i*scaler*slope*cos(t*x)/t - vec[i]*cos(t*x)/t - slope*x*cos(t*x)/t + slope*sin(t*x)/t**2
-            # f = i*scaler*slope*sp.cos(t*x)/t - vec[i]*sp.cos(t*x)/t - slope*x*sp.cos(t*x)/t + slope*sp.sin(t*x)/t**2
+            f = lambda x: i*scaler*slope*cos(t*x)/t - vec[i]*cos(t*x)/t - slope*x*cos(t*x)/t + slope*sin(t*x)/t**2      # antiderivative
 
             if (t == 0):
                 a += 0
@@ -69,7 +66,8 @@ def fourierTrigSeries(vec, n=10):
 if __name__ == "__main__":
     xs = np.arange(0, 15, 0.1)
     v = np.random.rand(15)
-    series = fourierTrigSeries(v, 6)
-    plt.plot(xs, series(xs), '-b')
-    plt.plot(v, 'gs--')
+    series = fourierTrigSeries(v, 8)
+    plt.plot(xs, series(xs), '-b', label='Fourier Trig Series, n=8')
+    plt.plot(v, 'gs--', label='Original Data')
+    plt.title('Fourier Series')
     plt.show()
