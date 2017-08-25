@@ -93,8 +93,8 @@ def emaData(vec, a=0.5):
 if __name__ == "__main__":
     xs = np.arange(0, 15, 0.1)
     v = np.random.rand(15)
-    # series = fourierTrigSeries(v, 8)
-    # plt.plot(xs, series(xs), '-b', label='Fourier Trig Series, n=8')
+    series = fourierTrigSeries(v, 8)
+    plt.plot(xs, series(xs), '-b', label='Fourier Trig Series, n=8')
     emaVector = emaData(v, 0.5)
     plt.plot(v, 'gs--', label='Original Data')
     plt.plot(emaVector, 'b', label='EMA')
