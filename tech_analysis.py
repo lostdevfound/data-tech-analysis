@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 import seaborn as sns
 from math import *
 
-def coef(vec, t, trigFunc):
+def fourierCoef(vec, t, trigFunc):
     """
     Compute the coefficients for Fourier trig series
     vec -- 1D numpy array of data for Fourier series
@@ -42,7 +42,7 @@ def coef(vec, t, trigFunc):
                 a += 0
             else:
                 a += (f(upperBound) - f(lowerBound)) * 1 / sp.pi
-    # print(trigFunc, "coef:", t, a)
+    # print(trigFunc, "fourierCoef:", t, a)
     return a
 
 
@@ -57,17 +57,46 @@ def fourierTrigSeries(vec, n=10):
     scaler = 2*sp.pi / (len(vec) -1 )
 
     for t in range(n):
-        series += coef(vec, t, "cos")*sp.cos(t*x*scaler) + coef(vec, t, "sin")*sp.sin(t*x*scaler)
+        series += fourierCoef(vec, t, "cos")*sp.cos(t*x*scaler) + fourierCoef(vec, t, "sin")*sp.sin(t*x*scaler)
 
     return sp.lambdify(x, series, modules=['numpy'])
+
+def ema(vec, i, a, data):
+    """ Compute recursive exponential moving avearge for index i and store
+    each ema value in data vector.
+    vec -- a 1D numpy array of data
+    i -- integer index of a current datum
+    a -- float smoothing value, a is between [0, 1]
+    data -- 1D array of ema values
+    """
+    if (i == 0):
+        data.append(vec[i])
+        return vec[i]
+
+    result = a*vec[i] + (1 - a)*ema(vec, i - 1, a, data)
+    data.append(result)
+    return result
+
+
+def emaData(vec, a=0.5):
+    """ A wraper for ema function. Compute ema vector
+    vec -- a 1D numpy array of data
+    a -- smoothing float value, a is between [0, 1]
+    """
+    data = []
+    ema(vec, vec.size - 1, 0.5, data)
+    return data
+
 
 
 # test program
 if __name__ == "__main__":
     xs = np.arange(0, 15, 0.1)
     v = np.random.rand(15)
-    series = fourierTrigSeries(v, 8)
-    plt.plot(xs, series(xs), '-b', label='Fourier Trig Series, n=8')
+    # series = fourierTrigSeries(v, 8)
+    # plt.plot(xs, series(xs), '-b', label='Fourier Trig Series, n=8')
+    emaVector = emaData(v, 0.5)
     plt.plot(v, 'gs--', label='Original Data')
+    plt.plot(emaVector, 'b', label='EMA')
     plt.title('Fourier Series')
     plt.show()
