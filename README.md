@@ -8,7 +8,7 @@ The function fourierTrigSeries(vec, n) produces a trigonometric Fourier Series a
 The function emaData(vec, a=0.5) computes the list of EMA values for each datum.
 
 #### Dependencies:
-Python 3.6.1 |Anaconda 4.4.0 (64-bit)
-numpy 1.12.1
-sympy 1.0
+Python 3.6.1 |Anaconda 4.4.0 (64-bit),
+numpy 1.12.1,
+sympy 1.0,
 matplotlib 2.0.2
