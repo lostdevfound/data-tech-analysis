@@ -99,7 +99,7 @@ def emaData(vec, a=0.5):
 
 
 # test program
-if __name__ == "__main__":
+# if __name__ == "__main__":
     # sns.set_style("whitegrid")
     #
     #
