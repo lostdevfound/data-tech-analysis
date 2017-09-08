@@ -40,12 +40,12 @@ def fourierCoef(vec, t, trigFunc):
                 a += 0
             else:
                 a += (f(upperBound) - f(lowerBound)) * 1 / pi
-    # print(trigFunc, "fourierCoef:", t, a)
     return a
 
 
-def fourierTrigSeries(vec, n=10):
-    """ Compute trigonometric Fourier series.
+def fourierTrigSeries(vec, n=10.0):
+    """ Compute trigonometric Fourier series and return a tuple which contains
+    a list of coefs and corresponding list of trig functions
     Keyword args:
     vec -- a 1D numpy array which contains the data points for Fourier series
     n -- number of terms in the series
@@ -61,12 +61,43 @@ def fourierTrigSeries(vec, n=10):
         sinCoef = fourierCoef(vec, t, "sin")
         cos = sp.cos(t*x*scaler)
         sin = sp.sin(t*x*scaler)
-        trigTerms.append((cosCoef, cos))    # list of tuples (coef, cos(tx))
+        trigTerms.append((cosCoef, cos))    # list of tuples (coef, trigfunc(tx))
         trigTerms.append((sinCoef, sin))
         # Fourier series
         series += cosCoef*cos + sinCoef*sin
 
     return (sp.lambdify(x, series, modules=['numpy']), trigTerms)
+
+
+def convolveFourierSeries(trigTerms, smoothingFactor=0):
+    """ Convolve the series in the frequency space using Gaussian function and return a new series and
+    a list of tuples containing a coef value and the associated trig function
+    Keyword args:
+    trigTerms -- a list of tupes which contains a coef value and the associated trig term
+    smoothingFactor -- a float which determines how much of convolution is applied on the curve, 0 value gives no convolution
+    """
+    if smoothingFactor < 0:
+        raise ValueError('smoothingFactor should be greater or equal to zero')
+
+    x = sp.Symbol('x')
+    coef, trigFuncs = zip(*trigTerms)
+
+    coefList = np.array(coef)
+    convolveFunction = lambda x: e**((-1)*smoothingFactor*(x**2))   # Gaussian function for line smoothing
+    modList = np.linspace(0,1,len(coefList))     # generate the x axis number line
+    modList = convolveFunction(modList)
+    modCoef = np.multiply(coefList, modList)
+
+    f = 0*x # define a 0 function
+    newTrigTerms = []
+    numLines = len(trigFuncs)
+
+    for i in range(numLines):
+        f += modCoef[i]* trigFuncs[i]
+        newTrigTerms.append((modCoef, trigFuncs))
+
+    return (sp.lambdify(x, f,modules=['numpy'] ), newTrigTerms)
+
 
 def ema(vec, i, a, data):
     """ Compute recursive exponential moving avearge for index i and store
