@@ -13,9 +13,9 @@ if __name__ == "__main__":
     # v = np.random.rand(35)
     v = [ 0.51489764,  0.02507128,  4.30564675,  0.30564675,   -3.02507128,  0.59657168,
           0.31133694,  5.03578274,  0.1550626,   -3.04124578,  0.59126738,  0.2298406,
-          0.9553957,   -1.93778872,  4.37510539,  -1.3242265,   0.68270655,  0.28223133,
-          0.57876526,  -0.49377124,  1.84679945,  -2.38998178,  0.85667925,  0.12089524,
-          0.54092031]
+          0.9553957,   -1.93778872+2,  4.37510539+4,  -1.3242265+5,   0.68270655+10,  0.28223133+8,
+          0.57876526+5,  -0.49377124+3,  1.84679945+10,  -2.38998178+9,  0.85667925+8,  0.12089524+11,
+          0.54092031+12]
     plt.figure(1)
     plt.subplot(311)
 
@@ -44,8 +44,8 @@ if __name__ == "__main__":
         line.set_linewidth(0.8)
 
 
-    smoothingFactor = 10
-    convolvedSeries, convolvedTrigTerms = convolveFourierSeries(trigTerms, smoothingFactor)
+    convolutionFactor = .1
+    convolvedSeries, convolvedTrigTerms = convolveFourierSeries(trigTerms, convolutionFactor, 'lowFreq')
     # emaVector = emaData(v, 0.5)
     plt.subplot(313)
     plt.title('Convolution with Gauss function in frequency space')

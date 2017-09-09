@@ -69,21 +69,29 @@ def fourierTrigSeries(vec, n=10.0):
     return (sp.lambdify(x, series, modules=['numpy']), trigTerms)
 
 
-def convolveFourierSeries(trigTerms, smoothingFactor=0):
+def convolveFourierSeries(trigTerms, filterFactor, operation):
     """ Convolve the series in the frequency space using Gaussian function and return a new series and
     a list of tuples containing a coef value and the associated trig function
     Keyword args:
     trigTerms -- a list of tupes which contains a coef value and the associated trig term
-    smoothingFactor -- a float which determines how much of convolution is applied on the curve, 0 value gives no convolution
+    filterFactor -- a float which determines how much of convolution is applied on the curve, 0 value gives no convolution
+    operation -- can be either 'highFreq' or 'lowFreq', if 'highFreq' is chosen then the method will filter high frequncies and vise-versa
     """
-    if smoothingFactor < 0:
+    if filterFactor < 0:
         raise ValueError('smoothingFactor should be greater or equal to zero')
+
+    if operation != "highFreq" and operation != "lowFreq":
+        raise ValueError("The third argument must be 'lowFreq' or 'highFreq'")
+
+    convolveFunction = lambda x: e**((-1)*filterFactor*(x**2))   # Gaussian function for line smoothing
+
+    if operation == "lowFreq" and filterFactor != 0:
+        convolveFunction = lambda x: (-1)*e**((-1)*((1 - filterFactor)*x**2)/filterFactor) + 1
 
     x = sp.Symbol('x')
     coef, trigFuncs = zip(*trigTerms)
 
     coefList = np.array(coef)
-    convolveFunction = lambda x: e**((-1)*smoothingFactor*(x**2))   # Gaussian function for line smoothing
     modList = np.linspace(0,1,len(coefList))     # generate the x axis number line
     modList = convolveFunction(modList)
     modCoef = np.multiply(coefList, modList)
