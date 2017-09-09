@@ -102,7 +102,7 @@ def convolveFourierSeries(trigTerms, filterFactor, operation):
 
     for i in range(numLines):
         f += modCoef[i]* trigFuncs[i]
-        newTrigTerms.append((modCoef, trigFuncs[i]))
+        newTrigTerms.append((modCoef[i], trigFuncs[i]))
 
     return (sp.lambdify(x, f,modules=['numpy'] ), newTrigTerms)
 
