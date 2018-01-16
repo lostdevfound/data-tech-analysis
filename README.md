@@ -1,6 +1,6 @@
 # data-tech-analysis
 Analysis of data using Fourier Analysis and Statistics
-![alt text](https://github.com/lostdevfound/data-tech-analysis/blob/master/analysis.png?raw=true)
+![alt text](https://github.com/lostdevfound/data_tech_analysis/blob/master/analysis_v2.jpg?raw=true)
 
 The module implements numerical and analytical solutions for Fourier Analysis of a time series. Also, the module implements de-noising and de-trending of data.
 
