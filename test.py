@@ -46,6 +46,7 @@ if __name__ == "__main__":
 
     convolutionFactor = .1
     convolvedSeries, convolvedTrigTerms = convolveFourierSeries(trigTerms, convolutionFactor, 'lowFreq')
+    print(convolvedTrigTerms[0][1])
     # emaVector = emaData(v, 0.5)
     plt.subplot(313)
     plt.title('Convolution with Gauss function in frequency space')
